@@ -1,0 +1,53 @@
+name: Update PR Title with Version
+
+on:
+  pull_request:
+    types: [opened]
+
+permissions:
+  pull-requests: write  # Required for updating PR titles
+
+jobs:
+  update_pr_title:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Extract Versions
+        id: extract_versions
+        run: |
+          # Read versions from the file
+          WF_VERSION=$(grep 'WF_VERSION' versions.txt | cut -d'=' -f2)
+          SDK_VERSION=$(grep 'SDK_VERSION' versions.txt | cut -d'=' -f2)
+          
+          # Create the clubbed version string
+          CLUBBED_VERSION="WF_${WF_VERSION}_SDK_${SDK_VERSION}"
+
+          echo "Extracted WF Version: $WF_VERSION"
+          echo "Extracted SDK Version: $SDK_VERSION"
+          echo "Clubbed Version: $CLUBBED_VERSION"
+
+          # Output the clubbed version for the next step
+          echo "::set-output name=clubbed_version::${CLUBBED_VERSION}"
+
+      - name: Update PR Title
+        env:
+          PR_URL: ${{ github.event.pull_request.url }}
+          CLUBBED_VERSION: ${{ steps.extract_versions.outputs.clubbed_version }}
+        run: |
+          # Get the current PR title
+          CURRENT_TITLE="${{ github.event.pull_request.title }}"
+          echo "Current PR Title: $CURRENT_TITLE"
+
+          # Update the PR title by appending the clubbed version
+          NEW_TITLE="${CURRENT_TITLE} [${CLUBBED_VERSION}]"
+          echo "New PR Title: $NEW_TITLE"
+
+          # Update the PR title using GitHub REST API
+          curl -X PATCH \
+            -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
+            -H "Content-Type: application/json" \
+            -d "{\"title\":\"${NEW_TITLE}\"}" \
+            "${PR_URL}"
