@@ -22,7 +22,7 @@ jobs:
           echo "version=$version" >> $GITHUB_OUTPUT
 
       - name: Create version.txt file
-        run: "echo '${{ needs.extract_version.outputs.version }}' > version.txt"
+        run: "echo '${{ GITHUB_OUTPUT }}' > version.txt"
         
       - name: Upload Version as Artifact
         uses: actions/upload-artifact@v4
