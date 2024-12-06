@@ -3,6 +3,7 @@ name: Update PR Title with Version
 on:
   pull_request:
     types: [opened]
+  workflow_dispatch:  
 
 permissions:
   pull-requests: write  # Required for updating PR titles
