@@ -10,7 +10,13 @@ jobs:
   use_version:
     runs-on: ubuntu-latest
     steps:
-      - name: Receive version from dispatch
+      - name: Download version artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: version-artifact
+
+      - name: Read version from artifact
         run: |
-          version=${{ github.event.client_payload.version }}
-          echo "Deploying Version: $version"
+          version=$(cat version.txt)
+          "echo 'Deploying Version: $version'"
+
