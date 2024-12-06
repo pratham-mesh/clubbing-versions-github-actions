@@ -23,7 +23,7 @@ jobs:
           repository: ${{github.repository}}
           run-id: 12197527413
       - name: Display downloaded file
-        run: cat ./version.txt 
+        run: cat ./downloads/version.txt 
         
       - name: List Files in Current Directory
         run: ls -l 
@@ -34,6 +34,6 @@ jobs:
 
       - name: Read version from artifact
         run: |
-          cat version.txt
+          cat ./downloads/version.txt
           echo 'Deploying Version: $version'    
 
