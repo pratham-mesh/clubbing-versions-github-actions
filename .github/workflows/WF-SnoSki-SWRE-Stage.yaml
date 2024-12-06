@@ -11,5 +11,4 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Use Version from ACI Workflow
-        run: |
-          "echo 'Deploying Version ${{ github.event.workflow_run.outputs.version }}'"
+        run: "echo 'Deploying Version: ${{ github.event.workflow_run.outputs.version }}'"
