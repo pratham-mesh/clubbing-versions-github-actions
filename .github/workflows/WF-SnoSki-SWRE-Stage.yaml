@@ -1,22 +1,14 @@
 name: WF-SnoSki-SWRE-Stage
 on:
-  workflow_run:
-    workflows:
-      - ACI-WorkflowContainer-Stage
+  repository_dispatch:
     types:
-      - completed
+      - trigger-wf-snoski-swre
 
 jobs:
   use_version:
     runs-on: ubuntu-latest
     steps:
-      - name: Download version artifact
-        uses: actions/download-artifact@v4
-        with:
-          name: version-artifact
-
-      - name: Read version from artifact
+      - name: Receive version from dispatch
         run: |
-          version=$(cat version.txt)
+          version=${{ github.event.client_payload.version }}
           echo "Deploying Version: $version"
-
