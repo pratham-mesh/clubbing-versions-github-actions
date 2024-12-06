@@ -20,9 +20,12 @@ jobs:
           version=$(echo "$run_name" | grep -oP '(?<=Version )\d+\.\d+\.\d+')
           echo "Extracted version: $version"
           echo "version=$version" >> $GITHUB_OUTPUT
-          
-  
-
+      - name: Upload Version as Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: version-artifact
+          path: version.txt        
+            
   end:
     needs: extract_version
     runs-on: ubuntu-latest
@@ -30,11 +33,4 @@ jobs:
       - name: Print Extracted Version
         run: "echo 'Extracted Version: ${{ needs.extract_version.outputs.version }}'"
 
-  label:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Set up Labeler
-        uses: actions/labeler@v4
-        with:
-          repo-token: ${{ secrets.GITHUB_TOKEN }}
-          config-file: .github/labeler.yml
+  
