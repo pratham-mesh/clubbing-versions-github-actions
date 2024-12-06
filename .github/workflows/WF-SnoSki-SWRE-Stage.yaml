@@ -10,54 +10,50 @@ jobs:
   use_version:
     runs-on: ubuntu-latest
     steps:
-      
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Fetch Artifacts from Triggering Workflow
-        id: fetch-artifacts
+      - name: Fetch Triggering Workflow Details
+        id: fetch-run-details
         run: |
-          # Get artifact list for the triggering workflow's run ID
+          # Fetch details of the triggering workflow using GitHub API
           curl -s -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
             -H "Accept: application/vnd.github+json" \
-            https://api.github.com/repos/${{ github.repository }}/actions/runs/${{ github.event.workflow_run.id }}/artifacts \
+            https://api.github.com/repos/${{ github.repository }}/actions/runs/${{ github.event.workflow_run.id }} \
+            > run_details.json
+          
+          # Extract the run_id and log for debugging
+          export RUN_ID=$(jq -r '.id' run_details.json)
+          echo "Triggered Run ID: $RUN_ID"
+          echo "run_id=$RUN_ID" >> $GITHUB_ENV
+
+      - name: Fetch Artifact Name
+        id: fetch-artifacts
+        run: |
+          # Fetch artifacts list from the triggering workflow
+          curl -s -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
+            -H "Accept: application/vnd.github+json" \
+            https://api.github.com/repos/${{ github.repository }}/actions/runs/${{ env.run_id }}/artifacts \
             > artifacts.json
-
-          # Extract the artifact name
-          export ARTIFACT_NAME=$(jq -r '.artifacts[0].name' < artifacts.json)
+          
+          # Extract the first artifact name
+          export ARTIFACT_NAME=$(jq -r '.artifacts[0].name' artifacts.json)
           echo "Artifact Name: $ARTIFACT_NAME"
-          echo "artifact_name=$ARTIFACT_NAME" >> $GITHUB_ENV  
+          echo "artifact_name=$ARTIFACT_NAME" >> $GITHUB_ENV
 
-      - name: Download the Artifact
+      - name: Download Artifact
         uses: actions/download-artifact@v4
         with:
           name: ${{ env.artifact_name }}
           path: ./downloads
-  
-         
-      #- name: Download version artifact
-       # uses: actions/download-artifact@v4
-        #with: 
-         # name: version
-          #path: ./downloads
-          #github-token: ${{ github.token }}
-         # repository: ${{github.repository}}
-         # run-id: ${{ github.event.workflow_run.id }}
-         
+
       - name: Display downloaded file
         run: cat ./downloads/version.txt 
-        
+
       - name: List Files in Current Directory
-        run: ls -l 
-
-      - name: List available artifacts
-        run: ls ${{ github.workspace }}
-
+        run: ls -l
 
       - name: Read version from artifact
         run: |
           version=$(cat ./downloads/version.txt)
           echo "Deploying Version: $version"
-          #cat ./downloads/version.txt
-          #echo 'Deploying Version: $version'    
-
