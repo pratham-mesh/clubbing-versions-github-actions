@@ -15,11 +15,10 @@ jobs:
         uses: actions/checkout@v4
          
       - name: Download version artifact
-        run: wget https://github.com/pratham-mesh/clubbing-versions-github-actions/actions/runs/12197223778/artifacts/2284213107
-        #uses: actions/download-artifact@v4
-        #with:
-        #  name: version-artifact
-         # path: ./downloads
+        uses: actions/download-artifact@v4
+        with: 
+          name: version
+          path: ./downloads
           
       - name: Display downloaded file
         run: cat ./version.txt 
