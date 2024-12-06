@@ -1,0 +1,15 @@
+name: WF-SnoSki-SWRE-Stage
+on:
+  workflow_run:
+    workflows:
+      - ACI-WorkflowContainer-Stage
+    types:
+      - completed
+
+jobs:
+  use_version:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Use Version from ACI Workflow
+        run: |
+          echo "Deploying Version ${{ github.event.workflow_run.outputs.version }}"
