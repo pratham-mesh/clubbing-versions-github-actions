@@ -10,8 +10,13 @@ jobs:
   use_version:
     runs-on: ubuntu-latest
     steps:
-      - name: Debug version output
-        run: "echo 'Version from extract_version job: ${{ needs.extract_version.outputs.version }}'"
+      - name: Download version artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: version-artifact
 
-      - name: Use Version from ACI Workflow
-        run: "echo 'Deploying Version: ${{ github.event.workflow_run.outputs.version }}'"
+      - name: Read version from artifact
+        run: |
+          version=$(cat version.txt)
+          echo "Deploying Version: $version"
+
