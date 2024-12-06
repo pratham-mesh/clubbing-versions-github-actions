@@ -26,7 +26,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Print Extracted Version
-        run: echo "Extracted Version: ${{ needs.extract_version.outputs.version }}"
+        run: "echo 'Extracted Version: ${{ needs.extract_version.outputs.version }}'"
 
   label:
     runs-on: ubuntu-latest
