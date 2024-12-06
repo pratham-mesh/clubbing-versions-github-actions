@@ -22,7 +22,7 @@ jobs:
           echo "version=$version" >> $GITHUB_OUTPUT
           
       - name: Upload Version as Artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: version-artifact
           path: version.txt
