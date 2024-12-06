@@ -19,10 +19,10 @@ jobs:
           run_name="Deploying Version 0.0.0"
           version=$(echo "$run_name" | grep -oP '(?<=Version )\d+\.\d+\.\d+')
           echo "Extracted version: $version"
-          echo "version=$version" >> $GITHUB_OUTPUT
+          echo "version=$version" >>  $GITHUB_ENV
 
       - name: Create version.txt file
-        run: "echo '${{ GITHUB_OUTPUT }}' > version.txt"
+        run: echo "${{ env.version }}" > version.txt
         
       - name: Upload Version as Artifact
         uses: actions/upload-artifact@v4
