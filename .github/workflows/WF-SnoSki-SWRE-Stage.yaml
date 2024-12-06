@@ -20,6 +20,9 @@ jobs:
           name: version-artifact
           path: ./downloads
           
+      - name: Display downloaded file
+        run: cat ./downloads/version.txt 
+        
       - name: List Files in Current Directory
         run: ls -l 
 
