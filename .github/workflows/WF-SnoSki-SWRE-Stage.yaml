@@ -18,7 +18,7 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: version-artifact
-          path: version.txt
+          path: ./downloads
           
       - name: List Files in Current Directory
         run: ls -l 
