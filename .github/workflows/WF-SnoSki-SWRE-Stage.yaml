@@ -45,6 +45,7 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: ${{ env.artifact_name }}
+          run-id: ${{ env.run_id }}
           path: ./downloads
 
       - name: Display downloaded file
