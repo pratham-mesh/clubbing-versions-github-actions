@@ -10,5 +10,8 @@ jobs:
   use_version:
     runs-on: ubuntu-latest
     steps:
+      - name: Debug version output
+        run: "echo 'Version from extract_version job: ${{ needs.extract_version.outputs.version }}'"
+
       - name: Use Version from ACI Workflow
         run: "echo 'Deploying Version: ${{ github.event.workflow_run.outputs.version }}'"
