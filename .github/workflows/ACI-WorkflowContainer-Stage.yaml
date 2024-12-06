@@ -20,11 +20,11 @@ jobs:
       - name: Extract Version from run-name
         id: extract_version
         run: |
-          run_name="${{ github.event.inputs.version }}"
+          run_name="${{ github.event.inputs.version || github.workflow }}"
           version=$(echo "$run_name" | grep -oP '(?<=Version )\d+\.\d+\.\d+')
           echo "Extracted version: $version"
           echo "version=$version" >>  $GITHUB_ENV
-
+          
       - name: Create version.txt file
         run: echo "${{ env.version }}" > version.txt
         
