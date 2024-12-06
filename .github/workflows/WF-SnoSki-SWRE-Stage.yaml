@@ -21,7 +21,7 @@ jobs:
           path: ./downloads
           github-token: ${{ github.token }}
           repository: ${{github.repository}}
-          run-id: 12197527413
+          run-id: ${{ github.event.workflow_run.id }}
       - name: Display downloaded file
         run: cat ./downloads/version.txt 
         
