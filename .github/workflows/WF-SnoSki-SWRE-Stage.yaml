@@ -15,10 +15,11 @@ jobs:
         with:
           name: version-artifact
           
-
+      - name: List Files in Current Directory
+        run: ls -l 
 
       - name: Read version from artifact
         run: |
-          version=$(cat version.txt)
-          "echo 'Deploying Version: $version'"
+          cat version.txt
+          echo 'Deploying Version: $version'    
 
