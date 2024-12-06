@@ -1,8 +1,10 @@
 name: WF-SnoSki-SWRE-Stage
 on:
-  repository_dispatch:
+  workflow_run:
+    workflows:
+      - ACI-WorkflowContainer-Stage
     types:
-      - trigger-wf-snoski-swre
+      - completed
 
 jobs:
   use_version:
