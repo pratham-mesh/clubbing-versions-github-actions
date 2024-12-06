@@ -26,6 +26,10 @@ jobs:
       - name: List Files in Current Directory
         run: ls -l 
 
+      - name: List available artifacts
+        run: ls ${{ github.workspace }}
+
+
       - name: Read version from artifact
         run: |
           cat version.txt
