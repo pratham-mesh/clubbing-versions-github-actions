@@ -12,4 +12,4 @@ jobs:
     steps:
       - name: Use Version from ACI Workflow
         run: |
-          echo "Deploying Version ${{ github.event.workflow_run.outputs.version }}"
+          "echo 'Deploying Version ${{ github.event.workflow_run.outputs.version }}'"
