@@ -13,13 +13,6 @@ jobs:
       
       - name: Checkout repository
         uses: actions/checkout@v4
-
-      - name: Install compatible Toolkit
-        run: |
-         npm i @actions/artifact
-         import {DefaultArtifactClient} from '@actions/artifact'
-         const {DefaultArtifactClient} = require('@actions/artifact')
-         const artifact = new DefaultArtifactClient()
          
       - name: Download version artifact
         uses: actions/download-artifact@v4
