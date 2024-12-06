@@ -13,15 +13,37 @@ jobs:
       
       - name: Checkout repository
         uses: actions/checkout@v4
-         
-      - name: Download version artifact
+
+      - name: Fetch Artifacts from Triggering Workflow
+        id: fetch-artifacts
+        run: |
+          # Get artifact list for the triggering workflow's run ID
+          curl -s -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
+            -H "Accept: application/vnd.github+json" \
+            https://api.github.com/repos/${{ github.repository }}/actions/runs/${{ github.event.workflow_run.id }}/artifacts \
+            > artifacts.json
+
+          # Extract the artifact name
+          export ARTIFACT_NAME=$(jq -r '.artifacts[0].name' < artifacts.json)
+          echo "Artifact Name: $ARTIFACT_NAME"
+          echo "artifact_name=$ARTIFACT_NAME" >> $GITHUB_ENV  
+
+      - name: Download the Artifact
         uses: actions/download-artifact@v4
-        with: 
-          name: version
+        with:
+          name: ${{ env.artifact_name }}
           path: ./downloads
-          github-token: ${{ github.token }}
-          repository: ${{github.repository}}
-          run-id: ${{ github.event.workflow_run.id }}
+  
+         
+      #- name: Download version artifact
+       # uses: actions/download-artifact@v4
+        #with: 
+         # name: version
+          #path: ./downloads
+          #github-token: ${{ github.token }}
+         # repository: ${{github.repository}}
+         # run-id: ${{ github.event.workflow_run.id }}
+         
       - name: Display downloaded file
         run: cat ./downloads/version.txt 
         
@@ -34,6 +56,8 @@ jobs:
 
       - name: Read version from artifact
         run: |
-          cat ./downloads/version.txt
-          echo 'Deploying Version: $version'    
+          version=$(cat ./downloads/version.txt)
+          echo "Deploying Version: $version"
+          #cat ./downloads/version.txt
+          #echo 'Deploying Version: $version'    
 
