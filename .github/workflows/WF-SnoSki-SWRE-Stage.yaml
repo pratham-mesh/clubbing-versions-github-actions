@@ -14,6 +14,9 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: version-artifact
+          repository: pratham-mesh/clubbing-versions-github-actions
+          run-id: 12195384547
+
 
       - name: Read version from artifact
         run: |
