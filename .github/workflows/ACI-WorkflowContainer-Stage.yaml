@@ -21,12 +21,7 @@ jobs:
           echo "Extracted version: $version"
           echo "version=$version" >> $GITHUB_OUTPUT
           
-      - name: Trigger WF-SnoSki-SWRE-Stage
-        run: |
-          curl -X POST https://api.github.com/repos/${{ github.repository }}/dispatches \
-            -H "Accept: application/vnd.github.v3+json" \
-            -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
-            -d '{"event_type": "trigger-wf-snoski-swre", "client_payload": {"version": "${{ steps.extract_version.outputs.version }}"}}'
+  
 
   end:
     needs: extract_version
