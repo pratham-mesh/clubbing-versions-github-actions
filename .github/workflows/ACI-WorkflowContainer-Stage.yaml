@@ -20,6 +20,12 @@ jobs:
           version=$(echo "$run_name" | grep -oP '(?<=Version )\d+\.\d+\.\d+')
           echo "Extracted version: $version"
           echo "version=$version" >> $GITHUB_OUTPUT
+          
+      - name: Upload Version as Artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: version-artifact
+          path: version.txt
 
   end:
     needs: extract_version
