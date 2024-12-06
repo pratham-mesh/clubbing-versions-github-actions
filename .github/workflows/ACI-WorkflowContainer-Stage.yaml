@@ -30,11 +30,6 @@ jobs:
           name: version-artifact
           path: version.txt        
             
-  end:
-    needs: extract_version
-    runs-on: ubuntu-latest
-    steps:
-      - name: Print Extracted Version
-        run: "echo 'Extracted Version: ${{ needs.extract_version.outputs.version }}'"
+
 
   
