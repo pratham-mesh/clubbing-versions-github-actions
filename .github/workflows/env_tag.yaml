@@ -22,10 +22,10 @@ jobs:
 
           $env:AZURE_CONFIG_DIR = "${env:GITHUB_WORKSPACE}\.azure"
 
-          az login --service-principal `
-            --username "${{ secrets.AZURE_CLIENT_ID }}" `
-            --password "${{ secrets.AZURE_CLIENT_SECRET }}" `
-            --tenant "${{ secrets.AZURE_TENANT_ID }}"
+          # az login --service-principal `
+          #   --username "${{ secrets.AZURE_CLIENT_ID }}" `
+          #   --password "${{ secrets.AZURE_CLIENT_SECRET }}" `
+          #   --tenant "${{ secrets.AZURE_TENANT_ID }}"
 
           $AcrLoginServer = "${{ vars.CONTAINERREPOSITORY }}.azurecr.io"
           $AcrName = "${{ vars.CONTAINERREPOSITORY }}"
