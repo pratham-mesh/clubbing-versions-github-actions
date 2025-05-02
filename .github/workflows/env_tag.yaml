@@ -14,16 +14,15 @@ jobs:
       - name: ACR Tag and Import
         shell: pwsh
         run: |
-          # Simulated GitHub environment values
-          $env:GITHUB_WORKSPACE = "C:\Test\Repo"
+          $env:GITHUB_WORKSPACE = "C:\Test\Cloud_Ethix_ACR"
           $env:GITHUB_RUN_NUMBER = "15"
           $env:ACI_BUILD_NO = "47"
-          $env:WorkflowName = "my-app"
+          $env:WorkflowName = "my-new-app"
           $env:environment = "dev"
 
-          # Static sample values
-          $AcrLoginServer = "sampleacr.azurecr.io"
-          $AcrName = "sampleacr"
+          # sample values
+          $AcrLoginServer = "cloudethixacr.azurecr.io"
+          $AcrName = "cloudethixacr"
           $WorkflowName = $env:WorkflowName
           $BuildNumberOfImage = "WFV_1.0.${env:GITHUB_RUN_NUMBER}-SDKV_1.0.${env:ACI_BUILD_NO}"
           $EnvironmentTag = $env:environment
