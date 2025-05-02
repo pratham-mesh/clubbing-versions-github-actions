@@ -27,7 +27,7 @@ jobs:
 	   $imageName = "$(AcrName)/$(WorkflowName)"
    	   $tags = az acr repository show-tags -n $AcrName --repository $repositoryName
            $tagToDelete = ''
-	   $ImageFound Bfalse
+	   $imageFound = $false
            	foreach ($tag in $tags) {
               if (Stag.Contains("${Environment Tag}")) {
                   $taglobelete Stag.Trim().Trim(","). Trâm("")
