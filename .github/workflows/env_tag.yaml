@@ -50,9 +50,9 @@ jobs:
           }
 
           if ($ImageFound) {
-              $ImageToDelete = "$ImageName:$TagToDelete"
-              Write-Host "Image to untag - $ImageToDelete"
-              az acr repository untag --name $AcrName --image $ImageToDelete
+            $ImageToDelete = "${ImageName}:${TagToDelete}"
+            Write-Host "Image to untag - $ImageToDelete"
+            az acr repository untag --name $AcrName --image $ImageToDelete
           }
 
           $SourceImage = "$AcrLoginServer/$AcrName/$WorkflowName:$BuildNumberOfImage"
