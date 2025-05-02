@@ -11,7 +11,7 @@ jobs:
       contents: read
 
     steps:
-      - name: Simulate ACR Tag and Import
+      - name: ACR Tag and Import
         shell: pwsh
         run: |
           # Simulated GitHub environment values
