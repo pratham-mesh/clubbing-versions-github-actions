@@ -14,11 +14,11 @@ jobs:
       - name: Azure CLI
         shell: pwsh
         run: |
-          if (Test-Path "./.azure") {
-            echo "folder exists"
-          } else {
-            New-Item -ItemType Directory -Path "./.azure"
-          }
+          #if (Test-Path "./.azure") {
+          #  echo "folder exists"
+          #} else {
+          #  New-Item -ItemType Directory -Path "./.azure"
+          # }
 
           $env:AZURE_CONFIG_DIR = "${env:GITHUB_WORKSPACE}\.azure"
 
