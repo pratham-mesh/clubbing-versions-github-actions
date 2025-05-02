@@ -31,7 +31,7 @@ jobs:
           $ImageName = "$AcrName/$WorkflowName"
 
           # Mocked ACR tag list
-          $tags = @("WFV_1.0.15-SDKV_1.0.47-dev", "latest", "prod")
+          $tags = @("WFV_1.0.15-SDKV_1.0.47-dev", "WFV_1.0.15-SDKV_1.0.48-dev", "WFV_1.0.15-SDKV_1.0.49-dev")
 
           $TagToDelete = ''
           $ImageFound = $false
