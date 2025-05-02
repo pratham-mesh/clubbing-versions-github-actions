@@ -55,8 +55,9 @@ jobs:
             az acr repository untag --name $AcrName --image $ImageToDelete
           }
 
-          $SourceImage = "$AcrLoginServer/$AcrName/$WorkflowName:$BuildNumberOfImage"
-          $NewImage = "$AcrName/$WorkflowName:$BuildNumberOfImage-$EnvironmentTag"
+          $SourceImage = "${AcrLoginServer}/${AcrName}/${WorkflowName}:${BuildNumberOfImage}"
+          $NewImage = "${AcrName}/${WorkflowName}:${BuildNumberOfImage}-${EnvironmentTag}"
+
 
           Write-Host "Source Image: $SourceImage"
           Write-Host "New Image: $NewImage"
