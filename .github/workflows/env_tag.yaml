@@ -11,32 +11,28 @@ jobs:
       contents: read
 
     steps:
-      - name: Azure CLI
+      - name: Simulate ACR Tag and Import
         shell: pwsh
         run: |
-          #if (Test-Path "./.azure") {
-          #  echo "folder exists"
-          #} else {
-          #  New-Item -ItemType Directory -Path "./.azure"
-          # }
+          # Simulated GitHub environment values
+          $env:GITHUB_WORKSPACE = "C:\Test\Repo"
+          $env:GITHUB_RUN_NUMBER = "15"
+          $env:ACI_BUILD_NO = "47"
+          $env:WorkflowName = "my-app"
+          $env:environment = "dev"
 
-          $env:AZURE_CONFIG_DIR = "${env:GITHUB_WORKSPACE}\.azure"
-
-          # az login --service-principal `
-          #   --username "${{ secrets.AZURE_CLIENT_ID }}" `
-          #   --password "${{ secrets.AZURE_CLIENT_SECRET }}" `
-          #   --tenant "${{ secrets.AZURE_TENANT_ID }}"
-
-          $AcrLoginServer = "${{ vars.CONTAINERREPOSITORY }}.azurecr.io"
-          $AcrName = "${{ vars.CONTAINERREPOSITORY }}"
-          $WorkflowName = "${env:WorkflowName}"
+          # Static sample values
+          $AcrLoginServer = "sampleacr.azurecr.io"
+          $AcrName = "sampleacr"
+          $WorkflowName = $env:WorkflowName
           $BuildNumberOfImage = "WFV_1.0.${env:GITHUB_RUN_NUMBER}-SDKV_1.0.${env:ACI_BUILD_NO}"
-          $EnvironmentTag = "${env:environment}"
+          $EnvironmentTag = $env:environment
 
           $RepositoryName = "$AcrName/$WorkflowName"
           $ImageName = "$AcrName/$WorkflowName"
 
-          $tags = az acr repository show-tags -n $AcrName --repository $RepositoryName --output tsv
+          # Mocked ACR tag list
+          $tags = @("WFV_1.0.15-SDKV_1.0.47-dev", "latest", "prod")
 
           $TagToDelete = ''
           $ImageFound = $false
@@ -52,14 +48,15 @@ jobs:
           if ($ImageFound) {
             $ImageToDelete = "${ImageName}:${TagToDelete}"
             Write-Host "Image to untag - $ImageToDelete"
-            az acr repository untag --name $AcrName --image $ImageToDelete
+            # Simulate untag command
+            Write-Host "az acr repository untag --name $AcrName --image $ImageToDelete"
           }
 
           $SourceImage = "${AcrLoginServer}/${AcrName}/${WorkflowName}:${BuildNumberOfImage}"
           $NewImage = "${AcrName}/${WorkflowName}:${BuildNumberOfImage}-${EnvironmentTag}"
 
-
           Write-Host "Source Image: $SourceImage"
           Write-Host "New Image: $NewImage"
 
-          az acr import --name $AcrName --source $SourceImage --image $NewImage --force
+          # Simulate import
+          Write-Host "az acr import --name $AcrName --source $SourceImage --image $NewImage --force"
