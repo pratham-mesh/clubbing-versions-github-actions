@@ -1,0 +1,51 @@
+name: Reusable Release-Stage
+on: 
+  workflow_dispatch:
+jobs:
+  TAGImage:
+    runs-on: windows-latest
+    permissions: 
+      id-token: write
+      contents: read
+    steps:
+    - name: Azure CLI
+      run: | 
+	         if (Test-Path "./.azure"){
+		        echo "folder exists" 
+	          }
+	          else {
+	          mkdir -p ./.azure
+  	        }	
+  	        $env:AZURE_CONFIG_DIR="${(github.workspace}}/.azure'
+    	      az login-service-principal --username ${{ secrets.AZURE_CLIENT+ID)) --password ${{ secrets.AZURE_CLIENT SECRET}} --tenant ${{ secrets. AZURE TENANT_ID}}
+    	      $AcrLoginServer = "${(vars. CONTAINERREPOSITORY)).azurecr.io"
+            $AcrName = "$(( vars. CONTAINERREPOSITORY ))"
+    	      $workflowName = "$env:WorkflowName"
+    	      $BuildNumberOfImage = "WFV_1.0.$env:github_run_number-SDKV_1.0.$env:ACI_build_no"
+            $EnvironmentTag= "$env:environment"
+    	      $repositoryName = "$(AcrName)/$(WorkflowName}"
+            $imageName = "$(AcrName)/$(WorkflowName)"
+     
+            $tags = az acr repository show-tags -n $AcrName --repository $repositoryName
+            $tagToDelete = ''
+            $ImageFound Bfalse
+           	foreach ($tag in $tags) {
+              if (Stag.Contains("${Environment Tag}")) {
+                  $taglobelete Stag.Trim().Trim(","). Trâm("")
+                  Write-Host. "Tag to be deleted = ${tagToDelete}"
+                  $imageFound = $true
+            }
+           }	
+       
+    	   if($imageFound)
+           {
+    	   $imageToDelete "${imageName}:{tagtodelete}"
+    	   Write-Host "Image to untag - ${imagetobelete}"
+    	   az acr repository untag --name $AcrName --image $imagetoDelete
+    	   }
+     
+    	   $sourceImage= "$(AcrLoginServer)/$(Acrliame)/$(WorkflowName) : (Build Number Of Image)"
+    	   $newImage = "$(AcrName)/${WorkflowName):${BuildNumberOfImage)$(EnvironmentTag)"
+     	   Write-Host "sourceImage (sourceImage)"
+    	   Write-Host "new Image (newImage)"
+           az acr import --name $AcrName --source $sourceImage --image $newImage --force
