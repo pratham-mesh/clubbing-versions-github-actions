@@ -19,43 +19,37 @@ jobs:
           $env:ACI_BUILD_NO = "47"
           $env:WorkflowName = "my-new-app"
           $env:environment = "dev"
-
-          # sample values
+          
           $AcrLoginServer = "cloudethixacr.azurecr.io"
           $AcrName = "cloudethixacr"
           $WorkflowName = $env:WorkflowName
           $BuildNumberOfImage = "WFV_1.0.${env:GITHUB_RUN_NUMBER}-SDKV_1.0.${env:ACI_BUILD_NO}"
           $EnvironmentTag = $env:environment
-
           $RepositoryName = "$AcrName/$WorkflowName"
           $ImageName = "$AcrName/$WorkflowName"
-
+          
           # Mocked ACR tag list
           $tags = @("WFV_1.0.15-SDKV_1.0.47-dev", "WFV_1.0.15-SDKV_1.0.48-dev", "WFV_1.0.15-SDKV_1.0.49-dev")
-
-          $TagToDelete = ''
-          $ImageFound = $false
-
+          $ImagesDeleted = @()
+          
           foreach ($tag in $tags) {
             if ($tag -like "*$EnvironmentTag*") {
               $TagToDelete = $tag.Trim()
-              Write-Host "Tag to be deleted = $TagToDelete"
-              $ImageFound = $true
+              $ImageToDelete = "${ImageName}:${TagToDelete}"
+              Write-Host "Deleting ACR tag: $ImageToDelete"
+              # Actual untag command (simulated here)
+              Write-Host "az acr repository untag --name $AcrName --image $ImageToDelete"
+              $ImagesDeleted += $ImageToDelete
             }
           }
 
-          if ($ImageFound) {
-            $ImageToDelete = "${ImageName}:${TagToDelete}"
-            Write-Host "Image to untag - $ImageToDelete"
-            # Simulate untag command
-            Write-Host "az acr repository untag --name $AcrName --image $ImageToDelete"
+          if ($ImagesDeleted.Count -eq 0) {
+            Write-Host "No images found to delete for environment tag '$EnvironmentTag'"
           }
 
           $SourceImage = "${AcrLoginServer}/${AcrName}/${WorkflowName}:${BuildNumberOfImage}"
           $NewImage = "${AcrName}/${WorkflowName}:${BuildNumberOfImage}-${EnvironmentTag}"
-
           Write-Host "Source Image: $SourceImage"
           Write-Host "New Image: $NewImage"
-
           # Simulate import
           Write-Host "az acr import --name $AcrName --source $SourceImage --image $NewImage --force"
