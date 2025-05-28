@@ -11,7 +11,7 @@ jobs:
       contents: read
 
     steps:
-      - name: ACR Tag and Import
+      - name: ACR Tag and Import Simulation (Local)
         shell: pwsh
         run: |
           $env:GITHUB_WORKSPACE = "C:\Test\Cloud_Ethix_ACR"
@@ -28,8 +28,13 @@ jobs:
           $RepositoryName = "$WorkflowName"
           $ImageName = "$WorkflowName"
 
-          # Fetch tags from ACR
-          $tags = az acr repository show-tags -n $AcrName --repository $RepositoryName | ConvertFrom-Json
+          # Simulated tag list for local testing
+          $tags = @(
+            "WFV_1.0.15-SDKV_1.0.46-dev",
+            "WFV_1.0.15-SDKV_1.0.47-dev",
+            "WFV_1.0.15-SDKV_1.0.48-prod"
+          )
+
           $tagToDelete = ''
           $imageFound = $false
 
@@ -45,8 +50,8 @@ jobs:
           if ($imageFound) {
             $imageToDelete = "${ImageName}:${tagToDelete}"
             Write-Host "Image to untag = $imageToDelete"
-            # Uncomment below to actually untag
-            # az acr repository untag --name $AcrName --image $imageToDelete
+            # Simulate untag
+            Write-Host "Simulated untag command: Would untag image $imageToDelete"
           } else {
             Write-Host "No matching image found with environment tag '$EnvironmentTag'"
           }
@@ -56,4 +61,4 @@ jobs:
           Write-Host "Source Image: $SourceImage"
           Write-Host "New Image: $NewImage"
           # Simulate import
-          Write-Host "az acr import --name $AcrName --source $SourceImage --image $NewImage --force"
+          Write-Host "Simulated import command: Would import image as $NewImage"
