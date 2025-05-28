@@ -16,7 +16,7 @@ jobs:
         run: |
           $env:GITHUB_WORKSPACE = "C:\Test\Cloud_Ethix_ACR"
           $env:GITHUB_RUN_NUMBER = "15"
-          $env:ACI_BUILD_NO = "47"
+          $env:ACI_BUILD_NO = "50"
           $env:WorkflowName = "my-new-app"
           $env:environment = "dev"
 
