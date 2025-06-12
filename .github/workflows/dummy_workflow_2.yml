@@ -1,0 +1,22 @@
+name: Dummy Workflow 2
+on:
+  workflow_dispatch:
+    inputs:
+      dummy_input:
+        description: Dummy
+        required: false
+        default: "test"
+      ACI_Workflow_RunID:
+        required: false
+      ACI_build_no:
+        required: false
+      environment:
+        required: false
+
+jobs:
+  echo:
+    runs-on: ubuntu-latest
+    steps:
+      - run: |
+          echo "Running Dummy Workflow 2"
+          echo "ACI Build: ${{ github.event.inputs.ACI_build_no }}"
