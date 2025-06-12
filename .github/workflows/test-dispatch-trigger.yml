@@ -1,0 +1,77 @@
+name: Dummy Workflow Dispatcher
+
+on:
+  workflow_dispatch:
+
+jobs:
+  dispatch:
+    runs-on: ubuntu-latest
+    steps:
+
+      - name: Set Auth Token and Headers
+        id: init
+        run: |
+          echo "TOKEN=${{ secrets.REPO_ACCESS_TOKEN }}" >> $GITHUB_ENV
+          echo "REPO=${{ github.repository }}" >> $GITHUB_ENV
+          echo "BRANCH=${{ github.ref_name }}" >> $GITHUB_ENV
+
+      - name: Fetch Latest Run of Dummy Workflow
+        shell: pwsh
+        run: |
+          $Headers = @{
+            Authorization = "Bearer $env:TOKEN"
+            Accept        = "application/vnd.github+json"
+          }
+
+          $WorkflowFile = "dummy_workflow.yml"
+          $ApiUrl = "https://api.github.com/repos/$env:REPO/actions/workflows/$WorkflowFile/runs?status=success&branch=$env:BRANCH&per_page=1"
+
+          $Response = Invoke-RestMethod -Uri $ApiUrl -Headers $Headers -Method Get
+          $LatestRun = $Response.workflow_runs | Sort-Object created_at -Descending | Select-Object -First 1
+
+          echo "Latest Run ID: $($LatestRun.id)"
+          echo "Latest Run Number: $($LatestRun.run_number)"
+
+          echo "ACI_Workflow_RunID=$($LatestRun.id)" | Out-File -FilePath $env:GITHUB_ENV -Append
+          echo "ACI_build_no=$($LatestRun.run_number)" | Out-File -FilePath $env:GITHUB_ENV -Append
+
+      - name: Trigger Dummy Workflows
+        shell: pwsh
+        env:
+          environment: TEST
+        run: |
+          $Headers = @{
+            Authorization = "Bearer $env:TOKEN"
+            Accept        = "application/vnd.github+json"
+          }
+
+          $WorkflowsToTrigger = @(
+            "dummy_workflow.yml",
+            "dummy_workflow_2.yml",
+            "dummy_workflow_3.yml"
+          )
+
+          foreach ($Workflow in $WorkflowsToTrigger) {
+            $WorkflowInfoApi = "https://api.github.com/repos/$env:REPO/actions/workflows/$Workflow"
+            $WorkflowInfo = Invoke-RestMethod -Uri $WorkflowInfoApi -Headers $Headers
+
+            if ($WorkflowInfo.state -ne "active") {
+              Write-Host "Skipping disabled workflow: $Workflow"
+              continue
+            }
+
+            $DispatchUrl = "https://api.github.com/repos/$env:REPO/actions/workflows/$Workflow/dispatches"
+
+            $Body = @{
+              ref    = "$env:BRANCH"
+              inputs = @{
+                dummy_input        = "test"
+                ACI_Workflow_RunID = "$env:ACI_Workflow_RunID"
+                ACI_build_no       = "$env:ACI_build_no"
+                environment        = "$env:environment"
+              }
+            } | ConvertTo-Json -Depth 3
+
+            Write-Host "Triggering workflow: $Workflow"
+            Invoke-RestMethod -Uri $DispatchUrl -Headers $Headers -Method Post -Body $Body
+          }
