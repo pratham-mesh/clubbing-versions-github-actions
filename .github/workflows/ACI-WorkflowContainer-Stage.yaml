@@ -1,4 +1,4 @@
-name: ACI-WorkflowContainer-Stage
+name: ECI-WorkflowContainer-Stage
 run-name: Deploying Version 0.0.2
 on:
   pull_request:
