@@ -21,7 +21,6 @@ on:
       Package_version:
         required: true
         type: string
-    secrets: inherit
 
 jobs:
   build-and-deploy:
