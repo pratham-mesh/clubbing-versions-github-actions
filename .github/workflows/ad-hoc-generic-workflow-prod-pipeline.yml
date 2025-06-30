@@ -28,6 +28,8 @@ on:
         required: true
         type: string
 
+run-name: WFV_Python_1.0.${{inputs.Build_id}}-${{inputs.WorkflowName}}
+
 jobs:
   Build_Img_PRD:
     uses: ./.github/workflows/ad-hoc-templates.yml
