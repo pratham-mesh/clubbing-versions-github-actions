@@ -1,0 +1,41 @@
+name: ad-hoc-templates
+
+on:
+  workflow_call:
+    inputs:
+      commit_id:
+        required: true
+        type: string
+      WorkflowName:
+        required: true
+        type: string
+      Run_id:
+        required: true
+        type: string
+      Build_id:
+        required: true
+        type: string
+      Artifact_Folder:
+        required: true
+        type: string
+      Package_version:
+        required: true
+        type: string
+    secrets: inherit
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Debug input values
+        run: |
+          echo "Commit ID: ${{ inputs.commit_id }}"
+          echo "Workflow Name: ${{ inputs.WorkflowName }}"
+          echo "Run ID: ${{ inputs.Run_id }}"
+          echo "Build ID: ${{ inputs.Build_id }}"
+          echo "Artifact Folder: ${{ inputs.Artifact_Folder }}"
+          echo "Package Version: ${{ inputs.Package_version }}"
+
+      # Placeholder for your real build & deploy steps
+      - name: Dummy Build Step
+        run: echo "Build and deploy steps go here."
