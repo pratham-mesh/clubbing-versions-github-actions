@@ -43,7 +43,7 @@ jobs:
   
 
   Register_ROS_STAGE:
-    if: ${{ github.ref == 'refs/heads/main' && inputs.WorkflowName == 'StepRateAnalysis' }}
+    if: ${{ github.ref == 'refs/heads/main' && (inputs.WorkflowName == 'StepRateAnalysis' || inputs.WorkflowName == 'PoolPressureSurvey') }}
     uses: ./.github/workflows/ad-hoc-templates.yml
     with:
       commit_id: ${{ inputs.commit_id }}
