@@ -40,4 +40,15 @@ jobs:
       Build_id: ${{ inputs.Build_id }}
       Artifact_Folder: ${{ inputs.Artifact_Folder }}
       Package_version: ${{ inputs.Package_version }}
-    secrets: inherit
+  
+
+  Register_ROS_STAGE:
+    if: ${{ github.ref == 'refs/heads/main' && inputs.WorkflowName == 'StepRateAnalysis' }}
+    uses: ./.github/workflows/ad-hoc-templates.yml
+    with:
+      commit_id: ${{ inputs.commit_id }}
+      WorkflowName: ${{ inputs.WorkflowName }}
+      Run_id: ${{ inputs.Run_id }}
+      Build_id: ${{ inputs.Build_id }}
+      Artifact_Folder: ${{ inputs.Artifact_Folder }}
+      Package_version: ${{ inputs.Package_version }}  
