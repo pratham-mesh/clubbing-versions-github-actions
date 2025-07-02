@@ -22,6 +22,9 @@ on:
         required: true
         type: string
 
+env: 
+  WorkflowName: ${{inputs.WorkflowName}}
+
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
@@ -30,6 +33,7 @@ jobs:
         run: |
           echo "Commit ID: ${{ inputs.commit_id }}"
           echo "Workflow Name: ${{ inputs.WorkflowName }}"
+          echo "Workflow Namw: ${{ env.WorkflowName }}"
           echo "Run ID: ${{ inputs.Run_id }}"
           echo "Build ID: ${{ inputs.Build_id }}"
           echo "Artifact Folder: ${{ inputs.Artifact_Folder }}"
