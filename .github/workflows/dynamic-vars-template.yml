@@ -1,0 +1,43 @@
+name: Load Workflow Variables Dynamically
+
+on:
+  workflow_call:
+    inputs:
+      workflow_name:
+        required: true
+        type: string
+
+jobs:
+  load-variables:
+    runs-on: windows-latest
+
+    steps:
+      - name: Load workflow variables from repo variable
+        id: loadvars
+        shell: pwsh
+        env:
+          JSON_DATA: ${{ vars.WORKFLOW_VARIABLES_JSON }}
+        run: |
+          $workflow = "${{ inputs.workflow_name }}"
+          Write-Host "Looking up workflow: $workflow"
+
+          $json = $env:JSON_DATA | ConvertFrom-Json
+          $vars = $json.$workflow
+
+          if ($null -eq $vars) {
+            Write-Error "No variables found for workflow '$workflow'"
+            exit 1
+          }
+
+          foreach ($kvp in $vars.PSObject.Properties) {
+            Write-Output "$($kvp.Name)=$($kvp.Value)" >> $env:GITHUB_ENV
+          }
+
+      - name: Show loaded variables
+        run: |
+          echo "Loaded ENV = $env:ENV"
+          echo "Loaded REGION = $env:REGION"
+
+      - name: Example logic using variables
+        run: |
+          echo "Running deployment for $env:ENV in $env:REGION"
