@@ -1,0 +1,14 @@
+name: Deploy Using Shared Template
+
+on:
+  workflow_dispatch:
+    inputs:
+      workflow_name:
+        description: 'Enter workflow name'
+        required: true
+
+jobs:
+  call-template:
+    uses: pratham-mesh/clubbing-versions-github-actions/.github/workflows/dynamic-vars-template.yml@main
+    with:
+      workflow_name: ${{ github.event.inputs.workflow_name }}
