@@ -6,6 +6,12 @@ on:
       workflow_name:
         description: 'Enter workflow name'
         required: true
+        type: choice
+        options:
+        - WF_GUY
+        - WF_CANADA
+        - RWRE
+        
 
 jobs:
   call-template:
