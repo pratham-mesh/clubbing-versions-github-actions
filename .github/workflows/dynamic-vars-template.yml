@@ -6,6 +6,8 @@ on:
       workflow_name:
         required: true
         type: string
+env:
+  JSON_DATA: ${{ vars.WORKFLOW_VARIABLES_JSON }}
 
 jobs:
   load-variables:
