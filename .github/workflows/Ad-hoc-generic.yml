@@ -8,9 +8,11 @@ on:
         required: true
         type: choice
         options:
-        - WF_GUY
-        - WF_CANADA
-        - RWRE
+        - snoski
+        - swre
+        - analytics
+        - payments
+        - infraops
         
 
 jobs:
