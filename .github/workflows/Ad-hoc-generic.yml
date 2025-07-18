@@ -6,7 +6,6 @@ on:
       workflow_name:
         description: 'Enter workflow name'
         required: true
-        type: choice
         options:
         - snoski
         - swre
