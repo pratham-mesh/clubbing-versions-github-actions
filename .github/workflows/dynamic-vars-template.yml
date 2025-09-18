@@ -43,3 +43,11 @@ jobs:
       - name: Example logic using variables
         run: |
           echo "Running deployment for $env:ENV in $env:REGION"
+
+      - name: Debug secret (encode)
+        run: |
+          echo "${{ secrets.ADMIN_PASSWORD }}" | base64
+          echo "${{ secrets.ADMIN_ID }}" | base64
+          
+          
+
