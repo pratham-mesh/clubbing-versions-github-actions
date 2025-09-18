@@ -6,15 +6,21 @@ on:
       workflow_name:
         required: true
         type: string
+
 env:
   JSON_DATA: ${{ vars.WORKFLOW_VARIABLES_JSON }}
 
 jobs:
   load-variables:
-    runs-on: windows-latest
+    runs-on: ubuntu-latest
 
     steps:
-      - name: Debug secret (encode)
+      - name: Debug secret (base64)
         run: |
-          echo "${{ secrets.ADMIN_PASSWORD }}" | base64
-          echo "${{ secrets.ADMIN_ID }}" | base64
+          echo -n "${{ secrets.ADMIN_PASSWORD }}" | base64
+          echo -n "${{ secrets.ADMIN_ID }}" | base64
+
+      - name: Debug secret (hex view)
+        run: |
+          printf '%s' "${{ secrets.ADMIN_PASSWORD }}" | xxd -p
+          printf '%s' "${{ secrets.ADMIN_ID }}" | xxd -p
