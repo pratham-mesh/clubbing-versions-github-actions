@@ -1,18 +1,19 @@
 name: Deploy Using Shared Template
 
 on:
-  workflow_dispatch:
-    inputs:
-      workflow_name:
-        description: 'Enter workflow name'
-        required: true
-        type: choice
-        options:
-        - snoski
-        - swre
-        - analytics
-        - payments
-        - infraops
+ push:
+ workflow_dispatch:
+  inputs:
+    workflow_name:
+      description: 'Enter workflow name'
+      required: true
+      type: choice
+      options:
+      - snoski
+      - swre
+      - analytics
+      - payments
+      - infraops
         
 
 jobs:
